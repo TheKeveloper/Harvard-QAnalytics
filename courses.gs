@@ -1,3 +1,7 @@
+//Retrieve the courses in the list
+//Retrieves from startIndex to endIndex - 1. If not specified, gets all courses
+//Optional parameter sheet to avoid reloading sheet. Creates new by default
+//Optional parameter minSems indicates minimum number of semesters course was offered for inclusion
 function getCourses(startIndex, endIndex, sheet, minSems) {
     if (minSems === undefined) {
         minSems = 2;
