@@ -32,7 +32,12 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
 }
 
 function findCourses(query, sheet, minSems){
-    query = query.trim();
+    //Trim any white space and remove repeat spaces
+    query = query.trim().replace("  ", " ");
+
+    if(query == 0){
+        return null;
+    }
     if(sheet == undefined){
         sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[0];
     }
