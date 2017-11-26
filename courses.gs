@@ -32,7 +32,7 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
 function findCourses(query, sheet, minSems){
     //Trim any white space and remove repeat spaces
     query = query.trim().replace("  ", " ");
-
+    //If empty query, return null
     if(query == 0){
         return null;
     }
@@ -45,6 +45,7 @@ function findCourses(query, sheet, minSems){
     var values = sheet.getRange("A:C").getValues();
     var courses = [];
     for(var i = 0; i < values.length; i++){
+        //Check if contains
         if(values[i][0].contains(query) || values[i][1].contains(query)){
             var c = new course(values[i][0], values[i][1], values[i][2]);
             if(c != undefined && c.infos.length >= minSems){
