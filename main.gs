@@ -16,11 +16,3 @@ function doGet(e) {
 function getScriptUrl(){
   return ScriptApp.getService().getUrl();
 }
-
-function getPage(){
-  return PropertiesService.getScriptProperties().getProperty("page");
-}
-
-function getCourseGroupNumber(){
-  return PropertiesSErvice.getScriptProperties().getProperty("course_group");
-}
