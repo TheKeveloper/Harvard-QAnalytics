@@ -1,6 +1,5 @@
 function setupMain(){
-  //Done: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
-  addCourses(13);
+  //Done: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 }
 
 function addCourses(nsheet){
@@ -11,13 +10,11 @@ function addCourses(nsheet){
   var curCodes = copyColumn(curValues, 0);
   var sheet = null;
   if(typeof nsheet == "number"){
-    var sheet = SpreadsheetApp.openByUrl(srcDocUrl).getSheets()[nsheet];
+    sheet = SpreadsheetApp.openByUrl(srcDocUrl).getSheets()[nsheet];
   }
   else if(typeof nsheet == "string"){
-    var sheet = SpreadsheetApp.openByUrl(srcDocUrl).getSheetByName(nsheet);
+    sheet = SpreadsheetApp.openByUrl(srcDocUrl).getSheetByName(nsheet);
   }
-  //Loops through the sheets, each corresponding to a semester
-  var sheet = srcSheets[nsheet];
   Logger.log("Starting sheet: " + nsheet);
   console.log("Starting sheet: " + nsheet);
   //Get codes and names
