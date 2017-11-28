@@ -1,15 +1,21 @@
 function setupMain(){
   //Done: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+  addCourses(13);
 }
 
 function addCourses(nsheet){
   var srcDocUrl = "https://docs.google.com/spreadsheets/d/1Dxpt_GEnandi16k15hHculhY2bjYRFpL_GdJpeGeVD0/edit#gid=1073495431";
   var outDocUrl = "https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0";
-  var srcSheets = SpreadsheetApp.openByUrl(srcDocUrl).getSheets();
   var curSheet = SpreadsheetApp.openByUrl(outDocUrl).getSheets()[0];
   var curValues = curSheet.getRange("A:C").getValues();
   var curCodes = copyColumn(curValues, 0);
-  
+  var sheet = null;
+  if(typeof nsheet == "number"){
+    var sheet = SpreadsheetApp.openByUrl(srcDocUrl).getSheets()[nsheet];
+  }
+  else if(typeof nsheet == "string"){
+    var sheet = SpreadsheetApp.openByUrl(srcDocUrl).getSheetByName(nsheet);
+  }
   //Loops through the sheets, each corresponding to a semester
   var sheet = srcSheets[nsheet];
   Logger.log("Starting sheet: " + nsheet);
