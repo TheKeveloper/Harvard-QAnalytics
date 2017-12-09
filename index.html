@@ -3,8 +3,24 @@
   <head>
     <base target="_top">
     <script type = "text/javascript">
-      var tblCourses = document.getElementById("tblCourses");
-      var courses = google.script.run.getCourses();
+      //Add course to the table
+      function addCourseRow(c, url){
+          var tblCourses = document.getElementById("tblCourses");
+          var row = tblCourses.insertRow(-1);
+          var cellCode = row.insertCell(0);
+          cellCode.innerHTML = c.code;
+          var cellName = row.insertCell(1);
+          var link = document.createElement("a");
+          link.href = url;
+          link.href += "?page=course&course="+c.code;
+          link.title = c.name;
+          link.innerHTML = c.name;
+          cellName.appendChild(link);
+      }
+      function start(){
+        var url = google.script.run.getScriptUrl();
+        var courses = google.script.run.getCourses();
+      }
       
     </script>
   </head>
