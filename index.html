@@ -12,7 +12,7 @@
           var cellName = row.insertCell(1);
           var link = document.createElement("a");
           link.href = url;
-          link.href += "?page=course&course="+c.code;
+          link.href += "?page=course&course="+c.code.replace(" ", "_");
           link.title = c.name;
           link.innerHTML = c.name;
           cellName.appendChild(link);

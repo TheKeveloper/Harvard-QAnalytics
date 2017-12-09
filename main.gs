@@ -4,9 +4,7 @@ function doGet(e) {
   if(params.page == undefined){
     params.page = "index";
   }
-  //Set the parameters for later retrieval
-  PropertiesService.getScriptProperties().setProperty("page", params.page);
-  PropertiesService.getScriptProperties().setProperty("course_group", params.course_group);
+  
 
   return HtmlService.createHtmlOutputFromFile(params.page);
 }

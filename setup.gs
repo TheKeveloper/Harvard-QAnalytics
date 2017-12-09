@@ -53,6 +53,26 @@ function addCourses(nsheet){
   SpreadsheetApp.flush();
 }
 
+//Removes leading whitespaces from all cells in column ncol
+//Starts from nrow and goes to end
+//Note: ncol and nrow are not zero indexed, based on spreadsheet numbers
+function removeLeadingSpace(ncol, nrow){
+  if(ncol == undefined) ncol = 2;
+  if(nrow == undefined) nrow = 2;
+  const url = "https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0";
+  const sheet = SpreadsheetApp.openByUrl(url).getSheets()[0];
+  const range = sheet.getRange("A:C");
+  for(var i = nrow; i <= range.getLastRow(); i++){
+    var cell = range.getCell(i, ncol);
+    var value = String(cell.getValue());
+    if(value[0] == " "){
+      value = value.substring(1);
+      cell.setValue(value);
+      SpreadsheetApp.flush();
+    } 
+  }
+}
+
 //Creates an array with the given column number in values
 function copyColumn(values, col){
   var arr = [];
