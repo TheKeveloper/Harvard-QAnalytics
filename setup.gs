@@ -39,9 +39,8 @@ function addCourses(nsheet){
     }
     else{
       //Get existing json array and check if already contains semester
-      //Logger.log("curValues " + index + ": " + curValues[index][2]);
       if(curValues[index][2].indexOf(sheet.getName()) < 0){
-        curValues[index][2] = curValues[index][2].concat(sheet.getName().toString() + "-" + i.toString() + ";");
+        curValues[index][2] = sheet.getName().toString() + "-" + i.toString() + ";" + curValues[index][2];
         var cell = curSheet.getRange("A:C").getCell(index + 1, 3);
         cell.setValue(curValues[index][2]);
       }

@@ -2,6 +2,7 @@
     <head>
         <title>Course</title>
         <script type = "text/javascript">
+            var course;
             function getParams(){
                 const url = window.location.href;
                 var params = {};
@@ -14,9 +15,14 @@
                 }
                 return params;
             }
+
+            function start(){
+                var params = getParams();
+                course = google.script.run.getCourse(params.code);
+            }
         </script>
     </head>
-    <body>
+    <body onload = "start()">
         
     </body>
 </html>

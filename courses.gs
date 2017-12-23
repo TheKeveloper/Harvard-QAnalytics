@@ -29,6 +29,49 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
     return courses;
 }
 
+function getCourse(code, sheet){
+    var c = getCourse(code, sheet);
+    getCourseRatings(c);
+    return c;
+}
+
+//Does a binary search on the course list for code
+//Returns a course object if found
+//Returns null if not found
+function binsearchCourse(code, sheet){
+    code = code.replace("_", " ");
+    if(sheet == undefined){
+        sheet = sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[0];
+    }
+
+    var values = sheet.getRange("A:C").getValues();
+
+    var low = 0;
+    var high = values.length - 1;
+    var mid = Math.floor((low + high) / 2);
+
+    while(low < high){
+        if(values[mid][0] === code){
+            return course(values[mid][0], values[mid][1], values[mid][2]);
+        }
+        else if(code < values[mid][0]){
+            high = mid;
+            mid = Math.floor((low + high) / 2);
+        }
+        else if(code > values[mid][0]){
+            low = mid;
+            mid = Math.floor((low + high) / 2);
+        }
+    }
+
+    if(values[low][0] === code){
+        return course(values[mid][0], values[mid][1], values[mid][2]);
+    }
+    else{
+        return null;
+    }
+}
+
 function findCourses(query, sheet, minSems){
     //Trim any white space and remove repeat spaces
     query = query.trim().replace("  ", " ");
@@ -82,11 +125,11 @@ function parseInfo(infoStr) {
 // infos should already have been parsed
 // Modifies infos to include ratings and enrollment
 function getCourseRatings(course, doc) {
-    var infos = course.infos;
     if (!course) {
         throw "NO COURSE SPECIFIED EXCEPTION";
         return;
     }
+    var infos = course.infos;
     if (doc === undefined) {
         doc = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1Dxpt_GEnandi16k15hHculhY2bjYRFpL_GdJpeGeVD0/edit#gid=1073495431");
     }

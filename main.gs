@@ -4,7 +4,6 @@ function doGet(e) {
   if(params.page == undefined){
     params.page = "index";
   }
-  
 
   return HtmlService.createHtmlOutputFromFile(params.page);
 }
