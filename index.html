@@ -3,6 +3,20 @@
   <head>
     <base target="_top">
     <script type = "text/javascript">
+
+      function getParams(){
+          const url = window.location.href;
+          var params = {};
+
+          var paramString = url.split("?")[1];
+          var args = paramString.split("&");
+          for(var i = 0; i < args.length; i++){
+              var parts = args[i].split("=");
+              params[parts[0]] = parts[1];
+          }
+          return params;
+      }
+
       //Add course to the table
       function addCourseRow(c, url){
           var tblCourses = document.getElementById("tblCourses");
@@ -11,23 +25,79 @@
           cellCode.innerHTML = c.code;
           var cellName = row.insertCell(1);
           var link = document.createElement("a");
-          link.href = url;
-          link.href += "?page=course&course="+c.code.replace(" ", "_");
+          link.href = url + "?page=course&course=" + c.code.replace(" ", "_");
           link.title = c.name;
           link.innerHTML = c.name;
           cellName.appendChild(link);
       }
+
+      //Start up code
       function start(){
+        //Number of links per page
+        const PAGE_LINKS = 50;
+        
+        //Parse the url params
+        var params = getParams();
+        if(params.index == undefined){
+          params.index = 0;
+        }
+
+        //Get the script url to add parameters
         var url = google.script.run.getScriptUrl();
-        var courses = google.script.run.getCourses();
+
+        //Navigation buttons at the bottom of the screen
+        var backNav = document.getElementById("backNav");
+        var nextNav = document.getElementById("nextNav");
+
+        //Create an add links that modify the parameters of the website
+        var nextLink = document.createElement("a"); 
+        nextLink.href = url + "?page=index&index=" + string(params.index + 1);
+        nextLink.innerHTML = "Next";
+        nextLink.title = "Back";
+        var backLink = document.createElement("a");
+        backLink.href = url + "?page=index&index=" + string(params.index > 1 ? params.index - 1 : 1);
+        backLink.innerHTML = "Back";
+        backLink.tilte = "Back";
+
+        backNav.appendChild(backLink);
+        nextNav.appendChild(nextLink);
+
+        //Get the courses
+        var courses = google.script.run.getCourses(params.index * PAGE_LINKS, (params.index + 1) * PAGELINKS);
+
+        //Add courses to the table
+        for(var i = 0; i < courses.length; i++){
+          addCourseRow(courses[i], url);
+        }
       }
       
     </script>
+
+    <style>
+        #tblCourses{
+          margin-top: 5%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        #backNav{ 
+          margin-left: 10%;
+          margin-bottom: 5%;
+        }
+
+        #nextNav{
+          margin-right: 10%;
+          margin-bottom: 5%;
+        }
+    </style>
   </head>
-  <body>
+  <body onload = "start()">
+    <h1>Q-Analytics</h1>
     <table id = "tblCourses">
+
     </table>
-    
+    <div id = "backNav"/>
+    <div id = "nextNav"/>
   </body>
 </html>
 

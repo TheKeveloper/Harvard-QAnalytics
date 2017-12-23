@@ -17,7 +17,7 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
     if (endIndex > values.length) {
         endIndex = values.length;
     }
-    for (var i = 1; i < values.length; i++) {
+    for (var i = startIndex; i < endIndex; i++) {
         var c = new course(values[i][0], values[i][1], values[i][2]);
         //Only push if the course has some history
         if (c != undefined && c.infos.length >= minSems) {
