@@ -72,6 +72,49 @@ function removeLeadingSpace(ncol, nrow){
   }
 }
 
+function addDepartments(courseStartIndex, deptCountStart){
+  //Optional parameter for the start index in the course list
+  //Minimum value is 1 due to title row
+  if(courseStartIndex == undefined || courseStartIndex < 1){
+    courseStartIndex = 1;
+  }
+
+  //Optional parameter for the starting department ROW in departments sheet.
+  //Minimum value should be zero since getCell is not zero indexed and need one row for title
+  if(deptCountStart == undefined || deptCountStart < 2){
+    deptCountStart = 2;
+  }
+
+  //Get all the sheets
+  const sheets = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets();
+
+  const codes = sheets[0].getRange("A:A").getValues();
+  const deptRange = sheets[1].getRange("A:C");
+
+  var startIndex = courseStartIndex;
+
+  //Store the current department to add to
+  var curDept = codes[courseStartIndex][0].split(" ")[0];
+  
+  //Store the index of the current department
+  var deptCount = deptCountStart;
+  
+  for(var i = courseStartIndex + 1; i < codes.length; i++){
+    //Get the department title
+    var dept = codes[i][0].split(" ")[0];
+    if(dept != curDept){
+      deptRange.getCell(deptCount, 1).setValue(curDept);
+      deptRange.getCell(deptCount, 2).setValue(startIndex);
+      deptRange.getCell(deptCount, 3).setValue(i - 1);
+      Logger.log(curDept + " completed\n");
+      console.log(curDept + " completed\n");
+
+      curDept = dept;
+      startIndex = i;
+    }
+  }
+}
+
 //Creates an array with the given column number in values
 function copyColumn(values, col){
   var arr = [];
