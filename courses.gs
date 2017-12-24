@@ -6,7 +6,7 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
     if (minSems === undefined) {
         minSems = 2;
     }
-    if (sheet == undefined) {
+    if (sheet == undefined || sheet == null) {
         sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[0];
     }
     var courses = [];
@@ -29,6 +29,36 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
     return courses;
 }
 
+//Get all the courses in a department
+function getDepartment(dept, sheet, minSems){
+    if(dept == undefined){ 
+        throw "ERROR: NO DEPARTMENT SPECIFIED";
+        return;
+    }
+    if(sheet == undefined){
+        sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[1];
+    }
+    
+    //Strip any whitespaces
+    dept = dept.replace(" ", "");
+    
+    const values = sheet.getRange("A:C").getValues();
+
+    //Search for course
+    for(var i = 1; i < values.length; i++){
+        if(values[i][0] == dept){
+            const startIndex = parseInt(values[i][1]);
+
+            //endIndex has to be one greater because Departments spreadsheet is inclusive but getCourses is exclusive
+            const endIndex = parseInt(values[i][2]) + 1;
+
+            //Get all courses between those indices
+            return getCourses(startIndex, endIndex, null, minSems);
+        }
+    }
+    return null;
+}
+
 function getCourse(code, sheet){
     var c = getCourse(code, sheet);
     getCourseRatings(c);
@@ -36,18 +66,42 @@ function getCourse(code, sheet){
 }
 
 //Does a binary search on the course list for code
+//code: the code the search for
+//searchDept: optional boolean for whether to search within a department for the course
 //Returns a course object if found
 //Returns null if not found
-function binsearchCourse(code, sheet){
+function binsearchCourse(code, searchDept, sheet){
     code = code.replace("_", " ");
+    if(searchDept == undefined){
+        searchDept = false;
+    }
     if(sheet == undefined){
-        sheet = sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[0];
+        sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[0];
     }
 
-    var values = sheet.getRange("A:C").getValues();
+    var values;
+
+    if(searchDept){
+        var deptValues = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[1].getRange("A:C").getValues();
+
+        const dept = code.split(" ").replace(" ", "")
+        for(var i = 1; i < deptValues.length; i++){
+            if(deptValues[i][0] == dept){
+                const startIndex = parseInt(deptValues[i][1]);
+                const endIndex = parseInt(deptValues[i][2]);
+
+                values = sheet.getRange("A" + String(startIndex + 1) + ":C" + String(endIndex + 1));
+                break;
+            }
+        }
+        
+    }
+    else{
+        values = sheet.getRange("A:C").getValues();
+    }
 
     var low = 0;
-    var high = values.length - 1;
+    var high = values.length;
     var mid = Math.floor((low + high) / 2);
 
     while(low < high){
