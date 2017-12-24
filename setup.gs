@@ -1,5 +1,6 @@
 function setupMain(){
   //Done: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+  addDepartments();
 }
 
 function addCourses(nsheet){
@@ -111,8 +112,15 @@ function addDepartments(courseStartIndex, deptCountStart){
 
       curDept = dept;
       startIndex = i;
+      deptCount += 1;
     }
   }
+  
+  deptRange.getCell(deptCount, 1).setValue(curDept);
+  deptRange.getCell(deptCount, 2).setValue(startIndex);
+  deptRange.getCell(deptCount, 3).setValue(codes.length - 1);
+  Logger.log(curDept + " completed\n");
+  console.log(curDept + " completed\n");
 }
 
 //Creates an array with the given column number in values
