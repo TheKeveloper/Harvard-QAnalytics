@@ -11,10 +11,10 @@ function getCourses(startIndex, endIndex, sheet, minSems) {
     }
     var courses = [];
     var values = sheet.getRange("A:C").getValues();
-    if (startIndex < 0) {
-        return null;
+    if (startIndex == undefined || startIndex < 0) {
+        startIndex = 0;
     }
-    if (endIndex > values.length) {
+    if (endIndex == undefined || endIndex > values.length) {
         endIndex = values.length;
     }
     for (var i = startIndex; i < endIndex; i++) {
@@ -65,6 +65,22 @@ function getCourse(code, sheet){
     return c;
 }
 
+
+function linsearchCourse(code, searchDept, sheet){
+    var courses;
+
+    if(searchdept){
+        courses = getDepartment(searchDept, sheet, 0);
+    }
+    else{
+        courses = getCourses(0);
+    }
+
+    for(var i = 0; i < courses.length; i++){
+        if(courses[i].code == code) return courses[i];
+    }
+    return null;
+}
 
 //Does a binary search on the course list for code
 //code: the code the search for
