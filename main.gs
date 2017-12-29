@@ -4,8 +4,14 @@ function doGet(e) {
   if(params.page == undefined){
     params.page = "index";
   }
-
-  return HtmlService.createHtmlOutputFromFile(params.page);
+  
+  const html = HtmlService.createHtmlOutputFromFile(params.page);
+  
+  for(var i = 0; i < param_names.length; i++){
+    html.addMetaTag(param_names[i], params[param_names[i]]);
+  }
+  
+  return 
 }
 
 

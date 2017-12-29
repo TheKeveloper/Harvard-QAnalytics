@@ -4,16 +4,14 @@
         <script type = "text/javascript">
             var course;
             function getParams(){
-                const url = window.location.href;
-                var params = {};
-
-                var paramString = url.split("?")[1];
-                var args = paramString.split("&");
-                for(var i = 0; i < args.length; i++){
-                    var parts = args[i].split("=");
-                    params[parts[0]] = parts[1];
-                }
-                return params;
+              const url = window.location.href;
+              var params = {};
+              var metas = document.getElementsByTagName("meta");
+          
+              for(var i = 0; i < metas.length; i++){
+                params[metas[i].getAttribute("name")] = metas[i].getAttribute("content");
+              }
+              return params;
             }
 
             function start(){
