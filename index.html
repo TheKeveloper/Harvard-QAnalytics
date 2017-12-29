@@ -62,9 +62,6 @@
         backNav.appendChild(backLink);
         nextNav.appendChild(nextLink);
 
-        //Get the courses
-        var courses = google.script.run.getCourses(params.index * PAGE_LINKS, (params.index + 1) * PAGELINKS);
-
         //Add courses to the table
         for(var i = 0; i < courses.length; i++){
           addCourseRow(courses[i], url);
