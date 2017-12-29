@@ -1,6 +1,10 @@
 function setupMain(){
   //Done: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-  addDepartments();
+  var startTime = new Date().getTime();
+  var department = getDepartment("COMPSCI");
+  var endTime = new Date().getTime();
+  Logger.log(department.length);
+  Logger.log("Elapsed time = " + (endTime - startTime));
 }
 
 function addCourses(nsheet){

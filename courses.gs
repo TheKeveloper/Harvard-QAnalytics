@@ -60,10 +60,11 @@ function getDepartment(dept, sheet, minSems){
 }
 
 function getCourse(code, sheet){
-    var c = getCourse(code, sheet);
+    var c = binsearchCourse(code, true, sheet);
     getCourseRatings(c);
     return c;
 }
+
 
 //Does a binary search on the course list for code
 //code: the code the search for
@@ -72,7 +73,7 @@ function getCourse(code, sheet){
 //Returns null if not found
 function binsearchCourse(code, searchDept, sheet){
     code = code.replace("_", " ");
-    if(searchDept == undefined){
+    if(searchDept == undefined || searchDept == null){
         searchDept = false;
     }
     if(sheet == undefined){
@@ -84,7 +85,7 @@ function binsearchCourse(code, searchDept, sheet){
     if(searchDept){
         var deptValues = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/11tRpkgU0JoV_qTa_KsI8yEO6aLz8KY9wtGmIQXkdaXs/edit#gid=0").getSheets()[1].getRange("A:C").getValues();
 
-        const dept = code.split(" ").replace(" ", "")
+        const dept = code.split(" ")[0].replace(" ", "")
         for(var i = 1; i < deptValues.length; i++){
             if(deptValues[i][0] == dept){
                 const startIndex = parseInt(deptValues[i][1]);
@@ -94,7 +95,7 @@ function binsearchCourse(code, searchDept, sheet){
                 break;
             }
         }
-        
+        values = sheet.getRange("A:C").getValues();
     }
     else{
         values = sheet.getRange("A:C").getValues();
@@ -106,7 +107,7 @@ function binsearchCourse(code, searchDept, sheet){
 
     while(low < high){
         if(values[mid][0] === code){
-            return course(values[mid][0], values[mid][1], values[mid][2]);
+            return new course(values[mid][0], values[mid][1], values[mid][2]);
         }
         else if(code < values[mid][0]){
             high = mid;
@@ -119,7 +120,7 @@ function binsearchCourse(code, searchDept, sheet){
     }
 
     if(values[low][0] === code){
-        return course(values[mid][0], values[mid][1], values[mid][2]);
+        return new course(values[mid][0], values[mid][1], values[mid][2]);
     }
     else{
         return null;
@@ -179,7 +180,7 @@ function parseInfo(infoStr) {
 // infos should already have been parsed
 // Modifies infos to include ratings and enrollment
 function getCourseRatings(course, doc) {
-    if (!course) {
+    if (course == null || course == undefined) {
         throw "NO COURSE SPECIFIED EXCEPTION";
         return;
     }
